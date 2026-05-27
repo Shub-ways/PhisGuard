@@ -28,14 +28,14 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/PhishGuard_Logo.png",
+      "48": "icons/PhishGuard_Logo.png",
+      "128": "icons/PhishGuard_Logo.png"
     }
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/PhishGuard_Logo.png",
+    "48": "icons/PhishGuard_Logo.png",
+    "128": "icons/PhishGuard_Logo.png"
   }
 }

@@ -127,7 +127,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       
       if (isApiBad || phishingSites.includes(url.hostname)) {
         chrome.notifications.create({
-          type: "basic", iconUrl: "icons/icon48.png",
+          type: "basic", iconUrl: "icons/PhishGuard_Logo.png",
           title: "PhishGuard Alert!",
           message: `Blocked access to known threat: ${url.hostname}`,
           priority: 2, requireInteraction: true
@@ -137,7 +137,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       
       if (isSuspiciousURL(changeInfo.url)) {
         chrome.notifications.create({
-          type: "basic", iconUrl: "icons/icon48.png",
+          type: "basic", iconUrl: "icons/PhishGuard_Logo.png",
           title: "Suspicious Site Warning",
           message: `${url.hostname} looks suspicious. Proceed with caution.`,
           priority: 2, requireInteraction: true
